@@ -10,20 +10,15 @@ class Game
   end
 
   def start
-    p 'Please introduce yourself.'
+    message_panel.player_name
     player.get_name
     loop do
       main_game
       finalize
-      system("clear")
-      stop
-      p "D you want to play a new game? Put yes or no"
-      input = gets.chomp
-      if input == "yes"
-        reset_game
-      elsif input == "no"
-        raise "Exiting the program"
-      end
+      system('clear')
+      message_panel.stop(player, dealer)
+      message_panel.new_game
+      reset_game
       break if
         player.bank.zero? || dealer.bank.zero?
     end
@@ -31,7 +26,7 @@ class Game
 
   def main_game
     renew_deck
-    game_starting
+    message_panel.game_starting
     send_starting_cards
     bet
     loop do
@@ -42,14 +37,6 @@ class Game
   end
 
   private
-
-  def stop
-    p "**********************************************"
-    p "Game results: "
-    p "Dealer: #{dealer.hand.cards.join(', ')}, points: #{player.hand.sum}, bank: #{dealer.bank}"
-    p "Player: #{player.hand.cards.join(', ')}, points: #{dealer.hand.sum}, bank: #{player.bank}"
-    p "***********************************************"
-  end
 
   def renew_deck
     self.deck = Deck.new
@@ -67,13 +54,13 @@ class Game
   end
 
   def move
-    dashboard(player, dealer, self)
-    move_menu
+    message_panel.dashboard(player, dealer, self)
+    message_panel.move_menu
     player.move self
-    dashboard(player, dealer, self)
+    message_panel.dashboard(player, dealer, self)
     message_from_dealer = dealer.move self
     p "Dealer is #{message_from_dealer}"
-    dashboard(player, dealer, self)
+    message_panel.dashboard(player, dealer, self)
   end
 
   def check_for_three_cards
@@ -92,37 +79,19 @@ class Game
     end
   end
 
-  def reset_game
-    self.bank = 0
-    player.reset_cards
-    dealer.reset_cards
-  end
-
   def finalize
     find_winner
     player.ready_to_open = false
     p 'Game finished' if player.bank.zero? || dealer.bank.zero?
   end
 
-  def game_starting
-    p 'Game starting'
-  end
-
-  def dashboard(player, dealer, game)
-    dealer_cards = dealer.hand.cards.count.times.map { '*' }
-    p "| Casino bank: #{game.bank}"
-    p "| Player cards: #{player.hand.cards.join(', ')} | bank: #{player.bank}"
-    p "| Dealer cards: #{dealer_cards.join(' ')} | bank: #{dealer.bank}"
-  end
-
-  def move_menu
-    p '| Your turn:'
-    p '| 1. Pass'
-    p '| 2. Take card'
-    p '| 3. Open cards'
-  end
-
   def ready_to_open_cards; end
+
+  def reset_game
+    self.bank = 0
+    player.reset_cards
+    dealer.reset_cards
+  end
 
   attr_writer :menu, :player, :deck, :dealer, :message_panel, :bank
 end
