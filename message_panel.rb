@@ -12,8 +12,8 @@ class MessagePanel
   def stop(player, dealer)
     p '**********************************************'
     p 'Game results: '
-    p "Dealer: #{dealer.hand.cards.join(', ')}, points: #{player.hand.sum}, bank: #{dealer.bank}"
-    p "Player: #{player.hand.cards.join(', ')}, points: #{dealer.hand.sum}, bank: #{player.bank}"
+    p "Dealer: #{dealer.hand.cards.join(', ')}, points: #{dealer.hand.sum}, bank: #{dealer.bank}"
+    p "Player: #{player.hand.cards.join(', ')}, points: #{player.hand.sum}, bank: #{player.bank}"
     p '***********************************************'
   end
 

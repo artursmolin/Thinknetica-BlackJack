@@ -1,5 +1,5 @@
 class Game
-  attr_reader :menu, :player, :deck, :dealer, :message_panel, :bank
+  attr_reader :menu, :player, :dealer, :deck, :message_panel, :bank
 
   def initialize(options)
     self.menu = options[:menu]
@@ -14,8 +14,8 @@ class Game
     player.get_name
     loop do
       main_game
-      finalize
       system('clear')
+      finalize
       message_panel.stop(player, dealer)
       message_panel.new_game
       reset_game
@@ -32,8 +32,8 @@ class Game
     loop do
       move
       break if
-          check_for_three_cards || player.ready_to_open?
-    end
+          check_for_three_cards || player.ready_to_open? || check_for_blackjack_over
+      end
   end
 
   private
@@ -64,18 +64,22 @@ class Game
   end
 
   def check_for_three_cards
-    player.hand.cards.count > 4 && dealer.hand.cards.count > 4
+    player.hand.cards.count > 3 && dealer.hand.cards.count > 3
+  end
+
+  def check_for_blackjack_over
+    player.hand.sum > 21 || dealer.hand.sum > 21
   end
 
   def find_winner
     player_score = player.hand.sum
     dealer_score = dealer.hand.sum
-    if player_score <= 21 && dealer_score > 21 || dealer_score < player_score
-      winner = player
-      player.bank += 20
-    elsif dealer_score <= 21 && player_score > 21 || player_score < dealer_score
-      winner = dealer
+    if player_score > 21 || dealer_score > player_score && dealer_score <= 21
       dealer.bank += 20
+      p 'Dealer win!'
+    elsif dealer_score > 21 || dealer_score < player_score && player_score <= 21
+      player.bank += 20
+      p "#{player.name} win!"
     end
   end
 
