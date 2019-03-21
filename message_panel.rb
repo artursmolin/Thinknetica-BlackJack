@@ -1,8 +1,11 @@
 class MessagePanel
   def new_game
-    p 'D you want to play a new game? Put yes or no'
+    p 'D you want to play a new game? Put yes, if you want to continue'
     input = gets.chomp
-    raise 'Exiting the program' if input != 'yes'
+    if input != "yes"
+      p 'Thanks for game!'
+      exit
+    end
   end
 
   def player_name
