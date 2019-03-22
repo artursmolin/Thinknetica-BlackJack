@@ -20,22 +20,19 @@ class MessagePanel
     p '***********************************************'
   end
 
-  def dashboard(player, dealer, game)
+  def dashboard_first(player, dealer, game)
     dealer_cards = dealer.hand.cards.count.times.map { '*' }
-    p "Hi, #{player.name}! Let's play!"
-    p "| Casino bank: #{game.bank}"
-    p "| Player cards: #{player.hand.cards.join(', ')} | bank: #{player.bank}"
-    p "| Dealer cards: #{dealer_cards.join(' ')} | bank: #{dealer.bank}"
+    p "Casino bank: #{game.bank}"
+    p "-------------------------"
+    p "Player cards: #{player.hand.cards.join(', ')} | bank: #{player.bank}"
+    p "Dealer cards: #{dealer_cards.join(' ')} | bank: #{dealer.bank}"
+    p "-------------------------"
   end
 
   def move_menu
-    p '| Your turn:'
-    p '| 1. Pass'
-    p '| 2. Take card'
-    p '| 3. Open cards'
-  end
-
-  def game_starting
-    p 'Game starting'
+    p 'Your turn:'
+    p '1. Pass'
+    p '2. Take card'
+    p '3. Open cards'
   end
 end

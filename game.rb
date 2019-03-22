@@ -12,6 +12,7 @@ class Game
   def start
     message_panel.player_name
     player.get_name
+    system('clear')
     loop do
       main_game
       system('clear')
@@ -19,6 +20,7 @@ class Game
       message_panel.stop(player, dealer)
       message_panel.new_game
       reset_game
+      system('clear')
       break if
         player.bank.zero? || dealer.bank.zero?
     end
@@ -26,7 +28,6 @@ class Game
 
   def main_game
     renew_deck
-    message_panel.game_starting
     send_starting_cards
     bet
     loop do
@@ -54,13 +55,11 @@ class Game
   end
 
   def move
-    message_panel.dashboard(player, dealer, self)
+    message_panel.dashboard_first(player, dealer, self)
     message_panel.move_menu
     player.move self
-    message_panel.dashboard(player, dealer, self)
     message_from_dealer = dealer.move self
     p "Dealer is #{message_from_dealer}"
-    message_panel.dashboard(player, dealer, self)
   end
 
   def check_for_three_cards
@@ -85,7 +84,7 @@ class Game
 
   def finalize
     find_winner
-    player.ready_to_open = false
+    player.ready_to_open = true
     p 'Game finished' if player.bank.zero? || dealer.bank.zero?
   end
 
