@@ -12,4 +12,8 @@ class Dealer < Player
       'took'
     end
   end
+  
+  def cards_closed
+    self.hand.cards.count.times.map { '*' }
+  end
 end

@@ -15,6 +15,7 @@ class Player
       self.name = player_name
       break unless player_name.length.zero?
     end
+    system('clear')
   end
 
   def take(cards)
@@ -36,6 +37,15 @@ class Player
 
   def reset_cards
     self.hand = Hand.new
+  end
+
+
+  def cards_opened
+    self.hand.cards.join(', ')
+  end
+
+  def cards_sum
+    self.hand.sum
   end
 
   private

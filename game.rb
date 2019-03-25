@@ -12,15 +12,12 @@ class Game
   def start
     message_panel.player_name
     player.get_name
-    system('clear')
     loop do
       main_game
-      system('clear')
       finalize
       message_panel.stop(player, dealer)
       message_panel.new_game
       reset_game
-      system('clear')
       break if
         player.bank.zero? || dealer.bank.zero?
     end
@@ -58,12 +55,12 @@ class Game
     message_panel.dashboard_first(player, dealer, self)
     message_panel.move_menu
     player.move self
-    message_from_dealer = dealer.move self
-    p "Dealer is #{message_from_dealer}"
+    message = dealer.move self
+    message_panel.dealer_message(message)
   end
 
   def check_for_three_cards
-    player.hand.cards.count > 3 && dealer.hand.cards.count > 3
+    player.hand.cards.count > 4 && dealer.hand.cards.count > 4
   end
 
   def check_for_blackjack_over
@@ -75,17 +72,21 @@ class Game
     dealer_score = dealer.hand.sum
     if player_score > 21 || dealer_score > player_score && dealer_score <= 21
       dealer.bank += 20
-      p 'Dealer win!'
+      message_panel.dealer_winner
     elsif dealer_score > 21 || dealer_score < player_score && player_score <= 21
       player.bank += 20
-      p "#{player.name} win!"
+      message_panel.player_winner(player)
+    elsif dealer_score == player_score
+      player.bank +=10
+      dealer.bank +=10
+      message_panel.draw_winner
     end
   end
 
   def finalize
     find_winner
-    player.ready_to_open = true
-    p 'Game finished' if player.bank.zero? || dealer.bank.zero?
+    player.ready_to_open = false
+    message_panel.game_end if player.bank.zero? || dealer.bank.zero?
   end
 
   def ready_to_open_cards; end

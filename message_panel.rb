@@ -6,6 +6,7 @@ class MessagePanel
       p 'Thanks for game!'
       exit
     end
+    system('clear')
   end
 
   def player_name
@@ -15,16 +16,16 @@ class MessagePanel
   def stop(player, dealer)
     p '**********************************************'
     p 'Game results: '
-    p "Dealer: #{dealer.hand.cards.join(', ')}, points: #{dealer.hand.sum}, bank: #{dealer.bank}"
-    p "Player: #{player.hand.cards.join(', ')}, points: #{player.hand.sum}, bank: #{player.bank}"
+    p "Dealer: #{dealer.cards_opened}, points: #{dealer.cards_sum}, bank: #{dealer.bank}"
+    p "Player: #{player.cards_opened}, points: #{player.cards_sum}, bank: #{player.bank}"
     p '***********************************************'
   end
 
   def dashboard_first(player, dealer, game)
-    dealer_cards = dealer.hand.cards.count.times.map { '*' }
+    dealer_cards = dealer.cards_closed
     p "Casino bank: #{game.bank}"
     p "-------------------------"
-    p "Player cards: #{player.hand.cards.join(', ')} | bank: #{player.bank}"
+    p "Player cards: #{player.cards_opened} | bank: #{player.bank}"
     p "Dealer cards: #{dealer_cards.join(' ')} | bank: #{dealer.bank}"
     p "-------------------------"
   end
@@ -34,5 +35,27 @@ class MessagePanel
     p '1. Pass'
     p '2. Take card'
     p '3. Open cards'
+  end
+
+  def dealer_message(message)
+    p "Dealer is #{message}"
+  end
+
+  def dealer_winner
+    p 'Dealer win!'
+    system('clear')
+  end
+
+  def player_winner(player)
+    p "#{player.name} win!"
+    system('clear')
+  end
+
+  def draw_winner
+    p 'Draw!'
+  end
+
+  def game_end
+    p 'Game finished'
   end
 end
